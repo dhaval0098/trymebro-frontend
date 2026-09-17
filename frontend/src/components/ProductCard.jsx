@@ -28,24 +28,33 @@ const ProductCard = ({ product, onQuickView }) => {
 
   // Assemble ONLY images uploaded by the admin (primary_image + additional_images)
   const rawImages = [];
-  if (product.primary_image && typeof product.primary_image === 'string' && product.primary_image.trim().length > 0) {
-    rawImages.push(product.primary_image.trim());
+  const sanitizeImgUrl = (url) => {
+    if (!url || typeof url !== 'string') return '';
+    let clean = url.trim();
+    if (clean.startsWith('http://') && !clean.includes('localhost') && !clean.includes('127.0.0.1')) {
+      clean = clean.replace('http://', 'https://');
+    }
+    return clean;
+  };
+
+  if (product.primary_image) {
+    const cleaned = sanitizeImgUrl(product.primary_image);
+    if (cleaned) rawImages.push(cleaned);
   }
   if (product.additional_images) {
     try {
       const parsed = typeof product.additional_images === 'string' ? JSON.parse(product.additional_images) : product.additional_images;
       if (Array.isArray(parsed)) {
         parsed.forEach(img => {
-          if (img && typeof img === 'string' && img.trim().length > 0) {
-            rawImages.push(img.trim());
-          }
+          const cleaned = sanitizeImgUrl(img);
+          if (cleaned) rawImages.push(cleaned);
         });
       }
     } catch (e) {}
   }
 
   // Deduplicate and filter valid images
-  const uniqueImages = Array.from(new Set(rawImages));
+  const uniqueImages = Array.from(new Set(rawImages)).filter(Boolean);
 
   // If no photos uploaded at all, fallback to 1 single placeholder; otherwise only use admin photos
   const images = uniqueImages.length > 0 ? uniqueImages : [DEFAULT_PLACEHOLDER_IMAGE];
@@ -78,10 +87,12 @@ const ProductCard = ({ product, onQuickView }) => {
   }, [images.length, prodIdNum]);
 
   const isFavorited = isInWishlist(product.id);
-  const activePrice = Number(product.discount_price || product.price);
-  const originalPrice = Number(product.price);
+  const rawActivePrice = Number(product.discount_price || product.price);
+  const activePrice = Number.isFinite(rawActivePrice) ? rawActivePrice : 0;
+  const rawOriginalPrice = Number(product.price);
+  const originalPrice = Number.isFinite(rawOriginalPrice) ? rawOriginalPrice : 0;
   const hasDiscount = product.discount_price && Number(product.discount_price) < originalPrice;
-  const discountPercent = hasDiscount ? Math.round(((originalPrice - activePrice) / originalPrice) * 100) : 0;
+  const discountPercent = hasDiscount && originalPrice > 0 ? Math.round(((originalPrice - activePrice) / originalPrice) * 100) : 0;
 
   return (
     <div 
@@ -92,10 +103,16 @@ const ProductCard = ({ product, onQuickView }) => {
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
+        width: '100%',
         position: 'relative',
         overflow: 'hidden',
         padding: '16px',
-        borderRadius: '16px'
+        borderRadius: '16px',
+        opacity: 1,
+        background: 'linear-gradient(180deg, #131724 0%, #0c0f17 100%)',
+        border: '1px solid rgba(212, 175, 55, 0.22)',
+        WebkitTransform: 'translateZ(0)',
+        transform: 'translateZ(0)'
       }}
     >
       {/* Badges Overlay */}
@@ -154,9 +171,8 @@ const ProductCard = ({ product, onQuickView }) => {
           width: '34px',
           height: '34px',
           borderRadius: '50%',
-          background: 'rgba(15, 19, 28, 0.75)',
-          backdropFilter: 'blur(8px)',
-          border: isFavorited ? '1px solid #f43f5e' : '1px solid rgba(255, 255, 255, 0.15)',
+          background: 'rgba(15, 19, 28, 0.88)',
+          border: isFavorited ? '1px solid #f43f5e' : '1px solid rgba(255, 255, 255, 0.2)',
           color: isFavorited ? '#f43f5e' : '#f8fafc',
           display: 'flex',
           alignItems: 'center',
@@ -174,10 +190,16 @@ const ProductCard = ({ product, onQuickView }) => {
         className="product-card-img-box"
         style={{
           position: 'relative',
+          width: '100%',
+          aspectRatio: '1 / 1',
           borderRadius: '12px',
           overflow: 'hidden',
           backgroundColor: '#0a0d14',
-          marginBottom: '14px'
+          marginBottom: '14px',
+          WebkitTransform: 'translateZ(0)',
+          transform: 'translateZ(0)',
+          WebkitBackfaceVisibility: 'hidden',
+          backfaceVisibility: 'hidden'
         }}
       >
         <Link 
@@ -185,8 +207,12 @@ const ProductCard = ({ product, onQuickView }) => {
           style={{
             display: 'block',
             position: 'relative',
-            paddingTop: '100%',
-            overflow: 'hidden'
+            width: '100%',
+            height: '100%',
+            aspectRatio: '1 / 1',
+            overflow: 'hidden',
+            WebkitTransform: 'translateZ(0)',
+            transform: 'translateZ(0)'
           }}
         >
           {images.map((imgSrc, idx) => {
@@ -196,6 +222,11 @@ const ProductCard = ({ product, onQuickView }) => {
                 key={idx}
                 src={imgSrc} 
                 alt={`${product.name} - View ${idx + 1}`}
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = DEFAULT_PLACEHOLDER_IMAGE;
+                }}
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -205,9 +236,11 @@ const ProductCard = ({ product, onQuickView }) => {
                   objectFit: 'cover',
                   opacity: isActive ? 1 : 0,
                   transform: isActive ? 'scale(1)' : 'scale(1.04)',
-                  transition: 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                  transition: 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1)',
                   zIndex: isActive ? 2 : 1,
-                  pointerEvents: isActive ? 'auto' : 'none'
+                  pointerEvents: isActive ? 'auto' : 'none',
+                  WebkitBackfaceVisibility: 'hidden',
+                  backfaceVisibility: 'hidden'
                 }}
                 className="product-card-img"
               />
@@ -235,7 +268,7 @@ const ProductCard = ({ product, onQuickView }) => {
                 width: '32px',
                 height: '32px',
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, rgba(16, 21, 31, 0.88) 0%, rgba(8, 10, 16, 0.96) 100%)',
+                background: '#0d111a',
                 border: '1px solid rgba(212, 175, 55, 0.65)',
                 color: '#f5df93',
                 display: 'flex',
@@ -243,7 +276,6 @@ const ProductCard = ({ product, onQuickView }) => {
                 justifyContent: 'center',
                 cursor: 'pointer',
                 zIndex: 6,
-                backdropFilter: 'blur(10px)',
                 boxShadow: '0 4px 14px rgba(0, 0, 0, 0.6), 0 0 10px rgba(212, 175, 55, 0.25)',
                 transition: 'all 0.28s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
@@ -269,7 +301,7 @@ const ProductCard = ({ product, onQuickView }) => {
                 width: '32px',
                 height: '32px',
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, rgba(16, 21, 31, 0.88) 0%, rgba(8, 10, 16, 0.96) 100%)',
+                background: '#0d111a',
                 border: '1px solid rgba(212, 175, 55, 0.65)',
                 color: '#f5df93',
                 display: 'flex',
@@ -277,7 +309,6 @@ const ProductCard = ({ product, onQuickView }) => {
                 justifyContent: 'center',
                 cursor: 'pointer',
                 zIndex: 6,
-                backdropFilter: 'blur(10px)',
                 boxShadow: '0 4px 14px rgba(0, 0, 0, 0.6), 0 0 10px rgba(212, 175, 55, 0.25)',
                 transition: 'all 0.28s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
@@ -299,8 +330,7 @@ const ProductCard = ({ product, onQuickView }) => {
                 zIndex: 4,
                 padding: '3px 8px',
                 borderRadius: '10px',
-                background: 'rgba(0, 0, 0, 0.45)',
-                backdropFilter: 'blur(4px)',
+                background: 'rgba(0, 0, 0, 0.75)',
                 opacity: isHovered ? 0 : 0.85,
                 transition: 'opacity 0.25s ease',
                 pointerEvents: 'none'
@@ -337,8 +367,7 @@ const ProductCard = ({ product, onQuickView }) => {
               bottom: '12px',
               left: '50%',
               transform: 'translateX(-50%)',
-              background: 'rgba(10, 13, 20, 0.92)',
-              backdropFilter: 'blur(8px)',
+              background: 'rgba(10, 13, 20, 0.95)',
               border: '1px solid rgba(212, 175, 55, 0.6)',
               borderRadius: '20px',
               padding: '6px 16px',

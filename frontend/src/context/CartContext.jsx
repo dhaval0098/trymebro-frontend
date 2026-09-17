@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../services/api';
+import api, { getSafeStorage, setSafeStorage } from '../services/api';
 import { useAuth } from './AuthContext';
 import { toast } from 'react-toastify';
 
@@ -48,7 +48,7 @@ export const CartProvider = ({ children }) => {
           setLoading(false);
         }
       } else {
-        const localCart = localStorage.getItem('scentvogue_guest_cart');
+        const localCart = getSafeStorage('scentvogue_guest_cart');
         if (localCart) {
           try {
             setCartItems(JSON.parse(localCart));
@@ -67,7 +67,7 @@ export const CartProvider = ({ children }) => {
   // Sync guest cart to local storage
   const saveGuestCart = (items) => {
     setCartItems(items);
-    localStorage.setItem('scentvogue_guest_cart', JSON.stringify(items));
+    setSafeStorage('scentvogue_guest_cart', JSON.stringify(items));
   };
 
   // Add product to cart

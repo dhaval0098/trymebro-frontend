@@ -5,4 +5,13 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react()],
   envPrefix: ['VITE_', 'REACT_APP_'],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://trymebro-backend-production.up.railway.app',
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  }
 })

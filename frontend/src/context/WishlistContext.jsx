@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../services/api';
+import api, { getSafeStorage, setSafeStorage } from '../services/api';
 import { useAuth } from './AuthContext';
 import { toast } from 'react-toastify';
 
@@ -29,7 +29,7 @@ export const WishlistProvider = ({ children }) => {
           setLoading(false);
         }
       } else {
-        const local = localStorage.getItem('scentvogue_wishlist');
+        const local = getSafeStorage('scentvogue_wishlist');
         if (local) {
           try {
             setWishlistItems(JSON.parse(local));
@@ -47,7 +47,7 @@ export const WishlistProvider = ({ children }) => {
 
   const saveLocalWishlist = (items) => {
     setWishlistItems(items);
-    localStorage.setItem('scentvogue_wishlist', JSON.stringify(items));
+    setSafeStorage('scentvogue_wishlist', JSON.stringify(items));
   };
 
   const isInWishlist = (productId) => {

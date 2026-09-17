@@ -329,6 +329,8 @@ const Home = () => {
         <Swiper
           className="categories-swiper card-swiper"
           modules={[Navigation]}
+          observer={true}
+          observeParents={true}
           navigation={{
             prevEl: '#cat-prev',
             nextEl: '#cat-next'
@@ -711,6 +713,8 @@ const Home = () => {
         <Swiper
           className="featured-products-swiper card-swiper"
           modules={[Navigation, Pagination, Autoplay]}
+          observer={true}
+          observeParents={true}
           navigation={{
             prevEl: '#feat-prev',
             nextEl: '#feat-next'
@@ -732,7 +736,7 @@ const Home = () => {
           style={{ width: '100%' }}
         >
           {featuredProducts.map((product) => (
-            <SwiperSlide key={product.id} style={{ height: 'auto' }}>
+            <SwiperSlide key={product.id} style={{ height: 'auto', display: 'flex', flexDirection: 'column' }}>
               <ProductCard product={product} onQuickView={setQuickViewProduct} />
             </SwiperSlide>
           ))}

@@ -658,6 +658,7 @@ h3,
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -668,6 +669,7 @@ h3,
     opacity: 0;
     transform: translateY(-16px) scale(0.97);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -1031,6 +1033,7 @@ h3,
 }
 
 @media (max-width: 640px) {
+
   .btn-luxury-gold,
   .btn-luxury-outline {
     padding: 8px 16px;
@@ -1340,6 +1343,7 @@ h3,
     transform: translateY(14px) scale(0.995);
     filter: blur(4px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -1353,6 +1357,7 @@ h3,
     transform: translateY(0) scale(1);
     filter: blur(0px);
   }
+
   100% {
     opacity: 0;
     transform: translateY(-8px) scale(0.995);
@@ -1379,10 +1384,12 @@ h3,
     transform: translateX(-100%);
     opacity: 1;
   }
+
   60% {
     transform: translateX(0%);
     opacity: 1;
   }
+
   100% {
     transform: translateX(100%);
     opacity: 0;
@@ -1397,7 +1404,7 @@ h3,
   transform: translateY(0) !important;
   filter: blur(0px) !important;
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 
@@ -1413,6 +1420,7 @@ h3,
     opacity: 0.7;
     transform: translateY(16px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1420,27 +1428,50 @@ h3,
 }
 
 /* Stagger Animation Delays */
-.stagger-1 { animation-delay: 0.06s !important; }
-.stagger-2 { animation-delay: 0.12s !important; }
-.stagger-3 { animation-delay: 0.18s !important; }
-.stagger-4 { animation-delay: 0.24s !important; }
-.stagger-5 { animation-delay: 0.30s !important; }
-.stagger-6 { animation-delay: 0.36s !important; }
+.stagger-1 {
+  animation-delay: 0.06s !important;
+}
+
+.stagger-2 {
+  animation-delay: 0.12s !important;
+}
+
+.stagger-3 {
+  animation-delay: 0.18s !important;
+}
+
+.stagger-4 {
+  animation-delay: 0.24s !important;
+}
+
+.stagger-5 {
+  animation-delay: 0.30s !important;
+}
+
+.stagger-6 {
+  animation-delay: 0.36s !important;
+}
 
 /* 3. Keyframe Micro-Animations for Ambient Luxury Glows */
 @keyframes floatSlow {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
+
   50% {
     transform: translateY(-8px) rotate(1deg);
   }
 }
 
 @keyframes pulseGoldGlow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.2), 0 0 35px rgba(212, 175, 55, 0.08);
   }
+
   50% {
     box-shadow: 0 0 25px rgba(212, 175, 55, 0.45), 0 0 50px rgba(212, 175, 55, 0.2);
   }
@@ -1450,6 +1481,7 @@ h3,
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
@@ -1465,9 +1497,10 @@ h3,
 
 @keyframes cardFadeIn {
   from {
-    opacity: 0;
-    transform: translateY(12px);
+    opacity: 0.85;
+    transform: translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1476,7 +1509,12 @@ h3,
 
 /* 4. Luxury Card & Button Hover Elevate */
 .product-card {
-  animation: cardFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  opacity: 1 !important;
+  visibility: visible !important;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .product-card,
@@ -1486,8 +1524,8 @@ h3,
 .glass-card {
   position: relative;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.35s ease;
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease;
   will-change: transform, box-shadow;
 }
 
@@ -1575,9 +1613,11 @@ h3,
     width: 38px !important;
     height: 38px !important;
   }
+
   .luxury-slider-btn.prev-btn {
     left: 8px !important;
   }
+
   .luxury-slider-btn.next-btn {
     right: 8px !important;
   }
@@ -1696,7 +1736,8 @@ h3,
   }
 
   .product-card-img-box .quick-look-btn {
-    display: none !important; /* Hide hover quick-look button on touch */
+    display: none !important;
+    /* Hide hover quick-look button on touch */
   }
 
   /* Brand and Concentration Row */
@@ -1786,6 +1827,7 @@ h3,
 
 /* MOBILE STANDARD BREAKPOINT (max-width: 480px) */
 @media (max-width: 480px) {
+
   /* Layout padding */
   .glass-card,
   .glass-panel {
@@ -1826,6 +1868,7 @@ h3,
 
 /* MOBILE 425PX SPECIFIC BREAKPOINT (max-width: 425px) */
 @media (max-width: 425px) {
+
   /* All Buttons & Interactive Controls */
   .btn-luxury-gold,
   .btn-luxury-outline,
@@ -1875,6 +1918,7 @@ h3,
 
 /* MOBILE 375PX SPECIFIC BREAKPOINT (max-width: 375px) */
 @media (max-width: 375px) {
+
   /* Global width lock & zero horizontal overflow */
   html,
   body,
@@ -1975,7 +2019,7 @@ h3,
     width: 100% !important;
   }
 
-  .product-details-actions > * {
+  .product-details-actions>* {
     width: 100% !important;
   }
 
@@ -2020,15 +2064,18 @@ h3,
   transition: all 0.2s ease;
   user-select: none;
 }
+
 .filter-pill-tag:hover {
   background: rgba(212, 175, 55, 0.22) !important;
   border-color: #d4af37 !important;
 }
+
 @keyframes filterModalIn {
   from {
     opacity: 0;
     transform: scale(0.95) translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -2069,6 +2116,7 @@ h3,
   0% {
     transform: translateX(-100%);
   }
+
   100% {
     transform: translateX(250%);
   }
@@ -2090,17 +2138,21 @@ h3,
 }
 
 .shop-product-card-anim {
-  animation: shopCardFadeIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+  opacity: 1 !important;
+  visibility: visible !important;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 @keyframes shopCardFadeIn {
   from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.98);
+    opacity: 0.85;
+    transform: translateY(6px);
   }
+
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
@@ -2130,6 +2182,7 @@ h3,
   0% {
     background-position: 200% 0;
   }
+
   100% {
     background-position: -200% 0;
   }
@@ -2139,6 +2192,7 @@ h3,
 .filter-btn-interactive {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
+
 .filter-btn-interactive:active {
   transform: scale(0.96) !important;
 }
@@ -2211,6 +2265,7 @@ h3,
     opacity: 0;
     transform: translateY(-8px) scale(0.97);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -2321,6 +2376,7 @@ h3,
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -2766,7 +2822,7 @@ h3,
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
   }
-  
+
   .footer-main-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 36px;
@@ -2881,6 +2937,7 @@ h3,
   .admin-form-actions-grid {
     flex-direction: column-reverse;
   }
+
   .admin-form-actions-grid .btn-luxury-outline,
   .admin-form-actions-grid .btn-luxury-gold {
     width: 100% !important;
@@ -3169,6 +3226,7 @@ h3,
     gap: 18px;
     text-align: center;
   }
+
   .reviews-breakdown-col {
     border-left: none;
     border-right: none;
@@ -3176,14 +3234,17 @@ h3,
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     padding: 14px 0;
   }
+
   .reviews-cta-col button {
     width: 100% !important;
   }
+
   .reviews-video-modal-body {
     grid-template-columns: 1fr;
     max-height: 85vh;
     overflow-y: auto;
   }
+
   .reviews-video-modal-player video {
     max-height: 44vh !important;
   }
@@ -3195,10 +3256,12 @@ h3,
     align-items: stretch;
     gap: 14px;
   }
+
   .reviews-type-tabs {
     width: 100%;
     display: flex;
   }
+
   .reviews-type-tab-btn {
     flex: 1;
     justify-content: center;
@@ -3206,26 +3269,32 @@ h3,
     font-size: 0.78rem;
     gap: 4px;
   }
+
   .reviews-filter-controls {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
+
   .reviews-search-wrapper {
     grid-column: 1 / -1;
     width: 100%;
   }
+
   .reviews-select-filter {
     width: 100%;
     max-width: 100% !important;
   }
+
   .reviews-form-row-2col {
     grid-template-columns: 1fr;
   }
+
   .reviews-written-grid {
     grid-template-columns: 1fr;
   }
+
   .reviews-video-grid {
     grid-template-columns: 1fr;
   }
@@ -3235,20 +3304,25 @@ h3,
   .reviews-hero-section {
     padding: 24px 12px 28px;
   }
+
   .reviews-scoreboard-card {
     padding: 16px 14px;
     border-radius: 18px;
   }
+
   .reviews-type-tab-btn {
     padding: 7px 4px;
     font-size: 0.72rem;
   }
+
   .reviews-filter-controls {
     grid-template-columns: 1fr;
   }
+
   .reviews-select-filter {
     font-size: 0.78rem;
   }
+
   .reviews-submit-modal-card {
     padding: 18px 14px;
     border-radius: 18px;
@@ -3372,6 +3446,7 @@ h3,
   .admin-reviews-table-wrapper {
     display: none !important;
   }
+
   .admin-reviews-mobile-card-list {
     display: flex !important;
   }
@@ -3382,39 +3457,48 @@ h3,
     flex-direction: column;
     align-items: stretch;
   }
+
   .admin-reviews-actions-group {
     width: 100%;
   }
-  .admin-reviews-actions-group > * {
+
+  .admin-reviews-actions-group>* {
     flex: 1 1 auto;
     justify-content: center;
     text-align: center;
   }
+
   .admin-reviews-stats-grid {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
+
   .admin-reviews-filter-bar {
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
   }
+
   .admin-reviews-type-tabs {
     width: 100%;
     display: flex;
   }
+
   .admin-reviews-type-tabs button {
     flex: 1;
     text-align: center;
     justify-content: center;
   }
+
   .admin-reviews-search-group {
     width: 100%;
   }
-  .admin-reviews-search-group > div {
+
+  .admin-reviews-search-group>div {
     flex: 1 1 140px;
     width: auto !important;
   }
+
   .admin-reviews-form-grid-2col,
   .admin-reviews-form-grid-prod-rating {
     grid-template-columns: 1fr;
@@ -3425,6 +3509,7 @@ h3,
   .admin-reviews-stats-grid {
     grid-template-columns: 1fr;
   }
+
   .admin-reviews-type-tabs button {
     padding: 6px 8px !important;
     font-size: 0.72rem !important;
