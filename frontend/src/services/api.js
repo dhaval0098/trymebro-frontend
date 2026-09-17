@@ -1,6 +1,29 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// Base URL resolution supporting Railway backend, Vite env and React App env
+const getBaseApiUrl = () => {
+  let url =
+    import.meta.env.VITE_API_URL ||
+    import.meta.env.REACT_APP_BACKEND_URL ||
+    import.meta.env.VITE_BACKEND_URL ||
+    'https://trymebro-backend-production.up.railway.app/api';
+
+  url = url.trim().replace(/\/+$/, '');
+
+  // Ensure endpoint routes have /api prefix
+  if (!url.endsWith('/api')) {
+    url = `${url}/api`;
+  }
+
+  // Use HTTPS for railway to prevent mixed content issues
+  if (url.startsWith('http://') && url.includes('railway.app')) {
+    url = url.replace('http://', 'https://');
+  }
+
+  return url;
+};
+
+const API_BASE_URL = getBaseApiUrl();
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -36,4 +59,5 @@ api.interceptors.response.use(
   }
 );
 
+export { API_BASE_URL };
 export default api;
