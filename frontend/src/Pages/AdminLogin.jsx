@@ -230,38 +230,12 @@ const AdminLogin = () => {
             color: '#ffffff', 
             marginBottom: '6px' 
           }}>
-            {step === 'credentials' ? 'Admin Portal Login' : '2-Step Verification'}
+            Admin Portal Login
           </h1>
           
           <p style={{ fontSize: '0.84rem', color: '#94a3b8', lineHeight: 1.5, margin: '0 auto', maxWidth: '380px' }}>
-            {step === 'credentials' 
-              ? 'Authorized personnel access for store management, catalog control & orders.'
-              : `Enter the 6-digit security code sent to ${maskEmail(targetEmail)}`}
+            Authorized personnel access for store management, catalog control & orders.
           </p>
-
-          {/* Step Progress Indicator */}
-          <div style={{ 
-            display: 'inline-flex', 
-            alignItems: 'center', 
-            gap: '8px', 
-            marginTop: '14px',
-            padding: '4px 14px',
-            borderRadius: '20px',
-            background: 'rgba(212, 175, 55, 0.08)',
-            border: '1px solid rgba(212, 175, 55, 0.25)',
-            fontSize: '0.75rem',
-            color: '#f5df93',
-            letterSpacing: '0.05em'
-          }}>
-            <span style={{ 
-              width: '8px', 
-              height: '8px', 
-              borderRadius: '50%', 
-              background: '#22c55e',
-              display: 'inline-block'
-            }} />
-            {step === 'credentials' ? 'Step 1 of 2 • Credentials' : 'Step 2 of 2 • Security OTP'}
-          </div>
         </div>
 
         {/* Error Alert */}
@@ -374,11 +348,11 @@ const AdminLogin = () => {
                 {loading ? (
                   <>
                     <span className="spinner" style={{ width: '16px', height: '16px', border: '2px solid rgba(0,0,0,0.2)', borderTopColor: '#000', borderRadius: '50%', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} />
-                    <span>Validating Credentials...</span>
+                    <span>Signing in...</span>
                   </>
                 ) : (
                   <>
-                    <span>Continue to Verification</span>
+                    <span>Sign In to Admin Portal</span>
                     <ArrowRight size={16} />
                   </>
                 )}
