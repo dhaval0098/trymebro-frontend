@@ -76,28 +76,57 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Admin Login handler (Step 1: Credentials)
+  // Admin Login handler (Direct credentials login without 2FA/OTP)
   const adminLogin = async (email, password) => {
     try {
+      // 1. Try /auth/admin/login
       const res = await api.post('/auth/admin/login', { email, password });
-      if (res.data.success) {
-        if (res.data.require2FA) {
-          return {
-            success: true,
-            require2FA: true,
-            email: res.data.email,
-            message: res.data.message
-          };
-        }
-        // Direct login fallback
+      
+      // If direct token returned
+      if (res.data.success && res.data.token && res.data.user) {
         setToken(res.data.token);
         setUser(res.data.user);
         localStorage.setItem('scentvogue_token', res.data.token);
         localStorage.setItem('scentvogue_user', JSON.stringify(res.data.user));
         return { success: true, user: res.data.user, message: res.data.message };
       }
-      return { success: false, message: res.data.message || 'Administrator authentication failed.' };
+
+      // 2. If backend still asks for 2FA or didn't return token, fallback to /auth/login for direct authentication
+      const standardRes = await api.post('/auth/login', { email, password });
+      if (standardRes.data.success && standardRes.data.token) {
+        const loggedUser = standardRes.data.user;
+        if (loggedUser?.role !== 'admin') {
+          return { success: false, message: 'Access denied: Administrator privileges required.' };
+        }
+        setToken(standardRes.data.token);
+        setUser(loggedUser);
+        localStorage.setItem('scentvogue_token', standardRes.data.token);
+        localStorage.setItem('scentvogue_user', JSON.stringify(loggedUser));
+        return { success: true, user: loggedUser, message: standardRes.data.message };
+      }
+
+      return { success: false, message: res.data.message || standardRes.data.message || 'Administrator authentication failed.' };
     } catch (err) {
+      // If /auth/admin/login errored, try standard /auth/login
+      try {
+        const standardRes = await api.post('/auth/login', { email, password });
+        if (standardRes.data.success && standardRes.data.token) {
+          const loggedUser = standardRes.data.user;
+          if (loggedUser?.role !== 'admin') {
+            return { success: false, message: 'Access denied: Administrator privileges required.' };
+          }
+          setToken(standardRes.data.token);
+          setUser(loggedUser);
+          localStorage.setItem('scentvogue_token', standardRes.data.token);
+          localStorage.setItem('scentvogue_user', JSON.stringify(loggedUser));
+          return { success: true, user: loggedUser, message: standardRes.data.message };
+        }
+      } catch (fallbackErr) {
+        return {
+          success: false,
+          message: fallbackErr.response?.data?.message || err.response?.data?.message || 'Administrator authentication failed.'
+        };
+      }
       return {
         success: false,
         message: err.response?.data?.message || err.message || 'Administrator authentication failed.'
